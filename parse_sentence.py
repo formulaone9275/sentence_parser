@@ -266,6 +266,7 @@ def extract_sentence_info_txt(inputfile,outputfile):
             print(protein_1)
             print(protein_2)
             #two protein together
+            '''
             if tagged_rm[start_index_protein_1-1] not in [' ',',','.']:
                 tagged_rm=tagged_rm[0:start_index_protein_1-1]+' '+tagged_rm[start_index_protein_1:]
             if tagged_rm[start_index_protein_2-1] not in [' ',',','.']:
@@ -275,7 +276,7 @@ def extract_sentence_info_txt(inputfile,outputfile):
             if end_index_protein_2<len(tagged_rm):
                 if tagged_rm[end_index_protein_2] not in [' ',',','.']:
                     tagged_rm=tagged_rm[0:end_index_protein_2]+' '+tagged_rm[end_index_protein_2+1:]
-
+'           '''
             #parse the sentence here
             parse_result=run(tagged_rm)
             #get the incoming dependency information
