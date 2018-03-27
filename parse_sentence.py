@@ -306,13 +306,13 @@ def extract_sentence_info_txt(inputfile,outputfile):
                     elif tok.word in protein_2 and int(tok.char_start)>=start_index_protein_2 and int(tok.char_end)<=end_index_protein_2:
                         protein_index_start_2=min(tok.index,protein_index_start_2)
                         protein_index_end_2=max(tok.index,protein_index_end_2)
-                    if protein_1 in tok.word and int(tok.char_start)<=start_index_protein_1 and int(tok.char_end)>=end_index_protein_1:
+                    if protein_1 in tok.word and int(tok.char_start)<=start_index_protein_1 and int(tok.char_end)>=end_index_protein_1-1:
 
                         #protein_1_in_this_word=True
                         protein_index_start_1=tok.index
                         protein_index_end_1=tok.index
 
-                    if protein_2 in tok.word and int(tok.char_start)<=start_index_protein_2 and int(tok.char_end)>=end_index_protein_2:
+                    if protein_2 in tok.word and int(tok.char_start)<=start_index_protein_2 and int(tok.char_end)>=end_index_protein_2-1:
                         #protein_2_in_this_word=True
                         protein_index_start_2=tok.index
                         protein_index_end_2=tok.index
@@ -330,13 +330,14 @@ def extract_sentence_info_txt(inputfile,outputfile):
                     two_proteins_in_one_word=False
                     protein_1_in_this_word=False
                     protein_2_in_this_word=False
-                    if protein_1 in toke.word and int(toke.char_start)<=start_index_protein_1 and int(toke.char_end)>=end_index_protein_2:
+
+                    if protein_1 in toke.word and int(toke.char_start)<=start_index_protein_1 and int(toke.char_end)>=end_index_protein_1-1:
 
                         protein_1_in_this_word=True
                         #protein_index_start_1=toke.index
                         #protein_index_end_1=toke.index
 
-                    if protein_2 in toke.word and int(toke.char_start)<=start_index_protein_2 and int(toke.char_end)>=end_index_protein_2:
+                    if protein_2 in toke.word and int(toke.char_start)<=start_index_protein_2 and int(toke.char_end)>=end_index_protein_2-1:
                         protein_2_in_this_word=True
                         #protein_index_start_2=toke.index
                         #protein_index_end_2=toke.index
@@ -400,7 +401,7 @@ def extract_sentence_info_txt(inputfile,outputfile):
 if __name__ == '__main__':
 
     #python parse_sentence.py ./corpus/bioinfer/bioinfer-1.2.0b-unified-format.xml bioinfer.txt
-    #python parse_sentence.py ./corpus/aimed/aimed.xml aimed.txt    
+    #python parse_sentence.py ./corpus/aimed/aimed.xml aimed.txt
     inputfile=sys.argv[1]
     outputfile=sys.argv[2]
     #print(inputfile)
