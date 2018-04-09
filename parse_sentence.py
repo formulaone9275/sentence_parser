@@ -88,8 +88,22 @@ def extract_sentence_info(inputfile,outputfile):
                     protein_start.append(int(offset_str[0:ind]))  
                     protein_end.append(int(offset_str[ind+1:len_offset_str]))
 
+            #the proteins are not in order in bioinfer, so this makes protein 2 appear before protein 1 in a lot of cases
+            protein_start_new=sorted(protein_start)
 
-            #print("protein_offset:",protein_offset)
+            ids_all_new=[]
+            protein_names_new=[]
+            for iii in protein_start_new:
+                ind_i=protein_start.index(iii)
+                ids_all_new.append(ids_all[ind_i])
+                protein_names_new.append(protein_names[ind_i])
+            ids_all=ids_all_new
+            protein_names=protein_names_new
+            protein_start.sort()
+            protein_end.sort()
+            print('Protein ids: ',ids_all)
+            print("protein_start: ",protein_start)
+            print("protein_end: ",protein_end)
             #parse the sentence here
             parse_result=run(sent.get("text"))
             #get the incoming dependency information
@@ -405,5 +419,5 @@ if __name__ == '__main__':
     inputfile=sys.argv[1]
     outputfile=sys.argv[2]
     #print(inputfile)
-    extract_sentence_info_txt(inputfile,outputfile)
+    extract_sentence_info(inputfile,outputfile)
 
