@@ -260,6 +260,35 @@ def extract_sentence_info_txt(inputfile,outputfile):
             interaction_relation=True if features[0]=='R_PPI' else False
             document_id=features[1]
             #print(features[0])
+            #change the annotation format
+            tagged=tagged.replace('<0>','')
+            tagged=tagged.replace('</0>','')
+            tagged=tagged.replace('<1>','<Gene>')
+            tagged=tagged.replace('</1>','</Gene>')
+            #put space before and after the hyphens that are not in the protein names
+            put_space=True
+            if put_space is True:
+                protein_name_hyphen=set()
+                #read the file that contain the protein name that have hyphen in them
+                with codecs.open('protein_hyphen.txt', encoding='utf8') as f:
+                    for line in f:
+                        protein_name_hyphen.add(line)
+                #find the hyphen positive
+                hyphen_position=[i for i in range(len(tagged)) if tagged.startwith('-',i)]
+                add_space_positive=[]
+                for hi in hyphen_position:
+                    sp_last=tagged.rfind(' ',0,hi)
+                    sp_next=tagged.rfind(' ',hi)
+                    if sp_next==-1:
+                        sp_next=len(tagged)
+                    if tagged[sp_last+1:sp_next] in protein_name_hyphen:
+                        continue
+                    else:
+                        add_space_positive.append(hi)
+                add_space_positive.sort(reverse=True)
+                for ai in add_space_positive:
+                    tagged=tagged[0:ai]+' '+tagged[ai]+' '+tagged[ai+1:]
+
             start_index_protein_1=tagged.find('<Gene>')
             end_index_protein_1=tagged.find('</Gene>')-6
 
