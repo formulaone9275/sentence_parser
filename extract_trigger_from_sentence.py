@@ -65,10 +65,16 @@ def extract_trigger(inputfile,picklefile):
             line = line.strip()
             info, tagged = line.split('\t')
             features = info.split(' ')
-            interaction_relation=True if features[0]=='Positive' else False
+            interaction_relation=True if features[0]=='R_PPI' else False
+            tagged=tagged.replace('<0>','')
+            tagged=tagged.replace('</0>','')
+            tagged=tagged.replace('<1>','<Gene>')
+            tagged=tagged.replace('</1>','</Gene>')
+            removed_tag=tagged.replace('<Gene>','')
+            removed_tag=removed_tag.replace('</Gene>','')
             if interaction_relation is True:
                 #parse the sentence here
-                parse_result=run(tagged)
+                parse_result=run(removed_tag)
 
                 #build a dictionary to store the incoming dependency
                 incoming_dependency={}
@@ -91,7 +97,9 @@ def extract_trigger(inputfile,picklefile):
     with open(picklefile, 'wb') as f:
 
         pickle.dump(file_dic, f, pickle.HIGHEST_PROTOCOL)
+
 def read_pickle(picklefile):
+    delete_list=['compound','det']
     with open(picklefile, 'rb') as f:
         data = pickle.load(f,encoding="latin1")
         #print(data)
@@ -102,8 +110,9 @@ def read_pickle(picklefile):
             for ddi in data[di].keys():
                 dependency_list=data[di][ddi][1]
                 dependency_list=list(set(dependency_list))
-                if 'compound' in dependency_list:
-                    dependency_list.remove('compound')
+                for deli in delete_list:
+                    if deli in dependency_list:
+                        dependency_list.remove(deli)
                 if len(dependency_list)>=2:
                     sub_dic[ddi]=(data[di][ddi][0],dependency_list)
             if len(sub_dic)>0:
@@ -118,7 +127,7 @@ def read_pickle(picklefile):
 
 
 if __name__ == '__main__':
-    inputfile='aimed_new.txt'
+    inputfile='aimed_gang.txt'
     picklefile='trigger_dependency.pickle'
     #extract_trigger(inputfile,picklefile)
     read_pickle(picklefile)
